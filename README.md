@@ -1,7 +1,7 @@
 # morphologica_template
 
 This example project demonstrates how you
-can write and build a program that uses morphologica as a library.
+can write and build a program that uses [morphologica](https://github.com/ABRG-Models/morphologica) as a library.
 
 Really, this project is just one `CMakeLists.txt` file containing the
 commands required to use morphologica and a single target (prog1),
