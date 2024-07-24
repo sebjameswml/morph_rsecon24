@@ -1,11 +1,15 @@
 # morphologica_template
 
-An example project that uses morphologica. Demonstrates how you
-incorporate morphologica into your own programs.
+This example project demonstrates how you
+can write and build a program that uses morphologica as a library.
 
-Really, this project is just one `CMakeLists.txt` file containig the
+Really, this project is just one `CMakeLists.txt` file containing the
 commands required to use morphologica and a single target (prog1),
 which compiles the example program `prog1.cpp`.
+
+To make your own program, you could either replace 
+prog1.cpp with your own code, or incorporate the relevant parts of the 
+CMakeLists.txt file into your own CMakeLists.txt in another project.
 
 To build and run the example:
 
