@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 # Give your project a name
-project(morph_template)
+project(morphologica_template)
 
 # From CMAKE_SYSTEM work out which of __OSX__, __GLN__, __NIX__ are required
 if(CMAKE_SYSTEM MATCHES Linux.*)
@@ -28,18 +28,13 @@ if (APPLE)
   set(CMAKE_CXX_FLAGS "${OS_FLAG} -Wall -Wfatal-errors -g -O3")
 else()
   # This assumes a gcc compiler (or a gcc mimic like Clang)
-  set(CMAKE_CXX_FLAGS "${OS_FLAG} -Wall -Wfatal-errors -g -O3 -Wno-unused-result -Wno-unknown-pragmas -march=native")
+  set(COMPREHENSIVE_WARNING_FLAGS "-Wall -Wextra -Wpedantic -pedantic-errors -Werror -Wfatal-errors -Wno-psabi -Wno-unknown-pragmas")
+  set(CMAKE_CXX_FLAGS "${OS_FLAG} -g -O3 ${COMPREHENSIVE_WARNING_FLAGS} -march=native")
 endif()
 
 # Tell clang to be quiet about brace initialisers:
 if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-braces")
-endif()
-
-# Add OpenMP flags here, if necessary
-find_package(OpenMP)
-if(OpenMP_FOUND)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
 # Additional GL compiler flags.
@@ -53,17 +48,13 @@ endif()
 # Tell the program where the morph fonts are, to compile them into the binary
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMORPH_FONTS_DIR=\"\\\"${PROJECT_SOURCE_DIR}/morphologica/fonts\\\"\"")
 
-# Find the libraries which will be needed
-find_package(HDF5 REQUIRED)
-find_package(Armadillo REQUIRED)
+# Find the libraries which will be needed by morphologica
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 find_package(Freetype REQUIRED)
 
-# Define collections of includes that have to be made for morphologica
-set(MORPH_INC_CORE ${ARMADILLO_INCLUDE_DIR} ${ARMADILLO_INCLUDE_DIRS} ${HDF5_INCLUDE_DIR})
-set(MORPH_INC_GL ${OPENGL_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})
-include_directories(${MORPH_INC_CORE} ${MORPH_INC_GL})
+# include files for graphics
+include_directories(${OPENGL_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})
 # Assuming that you installed morphologica in-tree (i.e. 'next to' yourprog.cpp).
 set(MORPH_INCLUDE_PATH "${PROJECT_SOURCE_DIR}/morphologica" CACHE PATH "The path to morphologica")
 include_directories(BEFORE ${MORPH_INCLUDE_PATH}/include) # Allows GL3/gl3.h to be found
@@ -71,7 +62,6 @@ include_directories(BEFORE ${MORPH_INCLUDE_PATH})         # Allows morph/Header.
 
 # If you want to add another directory to your include path, you can add an extra include_directories call:
 # include_directories(BEFORE ${PROJECT_SOURCE_DIR}/my_includes)
-# Note that ${PROJECT_SOURCE_DIR} will be replaced with the path to the base of your code repository.  
 
 #
 # All the library finding is now done. It's time to compile the program.
@@ -79,19 +69,15 @@ include_directories(BEFORE ${MORPH_INCLUDE_PATH})         # Allows morph/Header.
 
 # The sample is compiled from a single c++ file
 add_executable(prog1 prog1.cpp)
-# Set compiler definitions. The size of our floats and the option to compile in the realtime visualization.
-target_compile_definitions(prog1 PUBLIC FLT=float COMPILE_PLOTTING)
 
-# Morphologica code requires a number of libraries, collected into 'CORE' and 'GL'.
-set(MORPH_LIBS_CORE ${ARMADILLO_LIBRARY} ${ARMADILLO_LIBRARIES} ${HDF5_C_LIBRARIES})
-set(MORPH_LIBS_GL OpenGL::GL Freetype::Freetype glfw)
-target_link_libraries(prog1 ${MORPH_LIBS_CORE} ${MORPH_LIBS_GL})
+# Morphologica code requires a number of libraries, these are the ones required for graphics
+target_link_libraries(prog1 OpenGL::GL Freetype::Freetype glfw)
 
-if(OpenMP_FOUND)
-  target_link_libraries(prog1 OpenMP::OpenMP_CXX)
-endif()
+#
+# All done!
+#
 
-# For debugging of variables:
+# This is just a useful stanza for debugging of cmake variables:
 option(DEBUG_VARIABLES OFF)
 if(DEBUG_VARIABLES)
   get_cmake_property(_variableNames VARIABLES)
