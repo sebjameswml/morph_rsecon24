@@ -13,7 +13,7 @@
 
 int main()
 {
-    int rtn = -1;
+    int rtn = 0;
 
     // Create a morph::Visual. This is linked to a window on your desktop when the program runs
     morph::Visual v(1536, 1536, "A variety of graph formats");
