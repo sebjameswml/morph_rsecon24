@@ -1,7 +1,7 @@
 # morphologica_template
 
 This example project demonstrates how you
-can write and build a program that uses [morphologica](https://github.com/ABRG-Models/morphologica) as a library.
+can write and build a program that uses [morphologica](https://github.com/ABRG-Models/morphologica) as a library
 
 Really, this project is just one `CMakeLists.txt` file containing the
 commands required to use morphologica and a single target (prog1),
@@ -10,6 +10,10 @@ which compiles the example program `prog1.cpp`.
 To make your own program, you could either replace
 prog1.cpp with your own code, or incorporate the relevant parts of the
 CMakeLists.txt file into your own CMakeLists.txt in another project.
+
+## RSECon24 Workshop
+
+If you are attending the Research Software Engineering Conference [workshop on Sept 3 2024](https://virtual.oxfordabstracts.com/#/event/49081/submission/78) in Newcastle, please install the dependencies before the meeting! This is especially important if you wish to use your Mac or a non-Debian/Ubuntu Linux distro. Feel free to ask for help with this beforehand on this repository's [Issues](https://github.com/ABRG-Models/morphologica_template/issues).
 
 ## Dependencies
 
